@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch JSON Example</title>
+</head>
+<body>
+    <h1>Get YouTube Video URL</h1>
+    <form id="video-form">
+        <label for="videoid">YouTube Video ID:</label>
+        <input type="text" id="videoid" name="videoid" required>
+        <button type="submit">Fetch URL</button>
+    </form>
+    <h2>Result:</h2>
+    <pre id="result">No data yet...</pre>
+
+    <script>
+        document.getElementById('video-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const videoid = document.getElementById('videoid').value;
+            const apiUrl = "https://dip.vercel.app/api/get-url";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ url: `https://www.youtube.com/watch?v=${videoid}` })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const jsonData = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(jsonData, null, 2);
+            } catch (error) {
+                document.getElementById('result').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
