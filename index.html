@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch JSON Example</title>
+    <title>Fetch YouTube URL</title>
 </head>
 <body>
     <h1>Get YouTube Video URL</h1>
@@ -15,16 +15,37 @@
     <h2>Result:</h2>
     <pre id="result">No data yet...</pre>
 
-    fetch("https://dlp-sooty.vercel.app/api/get-url", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ url: "https://www.youtube.com/watch?v=${videoid}" })
-})
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error("Error:", error));
+    <script>
+        // フォームが送信されたときの処理
+        document.getElementById('video-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // フォームのデフォルト動作（ページリロード）を防ぐ
 
+            // 入力された動画IDを取得
+            const videoId = document.getElementById('videoid').value;
+
+            // Fetch APIを使ってリクエストを送信
+            fetch("https://dlp-sooty.vercel.app/api/get-url", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ url: `https://www.youtube.com/watch?v=${videoId}` })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 結果を表示
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                // エラーを表示
+                document.getElementById('result').textContent = `Error: ${error.message}`;
+            });
+        });
+    </script>
 </body>
 </html>
