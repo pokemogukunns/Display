@@ -20,7 +20,7 @@
   headers: {
     "Content-Type": "application/json"
   },
-  body: JSON.stringify({ url: "https://www.youtube.com/watch?v={videoid}" })
+  body: JSON.stringify({ url: "https://www.youtube.com/watch?v=${videoid}" })
 })
   .then(response => response.json())
   .then(data => console.log(data))
