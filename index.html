@@ -15,32 +15,16 @@
     <h2>Result:</h2>
     <pre id="result">No data yet...</pre>
 
-    <script>
-        document.getElementById('video-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            
-            const videoid = document.getElementById('videoid').value;
-            const apiUrl = "https://dip.vercel.app/api/get-url";
+    fetch("https://dlp-sooty.vercel.app/api/get-url", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ url: "https://www.youtube.com/watch?v={videoid}" })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error("Error:", error));
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ url: `https://www.youtube.com/watch?v=${videoid}` })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const jsonData = await response.json();
-                document.getElementById('result').textContent = JSON.stringify(jsonData, null, 2);
-            } catch (error) {
-                document.getElementById('result').textContent = `Error: ${error.message}`;
-            }
-        });
-    </script>
 </body>
 </html>
